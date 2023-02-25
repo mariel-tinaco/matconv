@@ -1,10 +1,8 @@
 from collections import defaultdict
 import numpy as np
 
-label_index = ['Blinker']
 
-def parse_sheet (sheet) -> dict:
-
+def parse_sheet (sheet, label_index) -> dict:
     class ColumnStruct:
         def __init__ (self, filename, header, label_by_index = False):
             self.filename = filename
@@ -34,8 +32,8 @@ def parse_sheet (sheet) -> dict:
     for row in range(1, sheet.max_row):
         col = [i[row].value for i in sheet.iter_cols(1, sheet.max_column)]
         if col[0]:
-            struct = ColumnStruct(col[0], header=header, label_by_index=False)
-            struct.add (col[1:5], col[-1])
+            struct = ColumnStruct(col[0], header=header, label_by_index=True if label_index else False)
+            struct.add (col[1:5], label_index.index(col[-1]) if label_index else col[-1])
         else:
             print("Not yet implemented")
 

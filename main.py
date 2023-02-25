@@ -1,7 +1,7 @@
 """
 Run example
 
->>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx"
+>>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx -l"
 
 """
 
@@ -11,20 +11,25 @@ from pathlib import Path
 
 from src.functions import *
 
-def main (xlsx_source):
+LABELS = ['Blinker']
+MAT_FILENAME = 'blinkerStruct.mat'
+
+def main (xlsx_source, label):
     xlsx_source = Path (xlsx_source)
 
     dataframe = openpyxl.load_workbook(xlsx_source)
     dataframe1 = dataframe.active
 
+    parsed = parse_sheet(dataframe1, LABELS if label else None)
+
     matrix = {
         '__globals__' : [],
-        '__header__' : b'MATLAB 5.0 MAT-file, Platform: PCWIN64, Created on: Fri Feb 24 17:11:54 2023',
+        '__header__' : b'MATLAB 5.0 MAT-file, Platform: PCWIN64, Created on: Fri Feb 25 11:11:11 2023',
         '__version__' : '1.0',
-        'blinkerStruct' : parse_sheet(dataframe1) 
+        'blinkerStruct' : parsed
     }
 
-    savemat('blinkerStruct.mat', mdict=matrix)
+    savemat(MAT_FILENAME, mdict=matrix)
 
     
 if __name__ == "__main__":
@@ -32,7 +37,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-x', '--xlsx', type=str, required=True)
+    parser.add_argument('-l', default=False, action='store_true')
     args = parser.parse_args()
 
-    main (xlsx_source=args.xlsx)
+    main (xlsx_source=args.xlsx, label=args.l)
 

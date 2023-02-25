@@ -59,4 +59,4 @@ if __name__ == "__main__":
 
     # print(digitStruct)
 
-    load ('assets/clipped_digitStruct.mat')
+    load ('blinkerStruct.mat')
