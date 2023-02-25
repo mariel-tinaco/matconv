@@ -10,5 +10,5 @@ pip install -r requirements.txt
 
 # Run
 ```
-python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx"
+python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx" -l
 ```
