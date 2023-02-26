@@ -8,7 +8,7 @@ Run example
 import openpyxl
 import h5py as h5 
 import hdf5storage
-from scipy.io import savemat, loadmat
+import mat4py
 from pathlib import Path
 
 from src.functions import *
@@ -23,11 +23,10 @@ def main (xlsx_source, mat_filename, label):
 
     parsed = parse_sheet(dataframe1, LABELS if label else None)
 
-    matrix = {
-        mat_filename.split('.')[0] : parsed
-    }
+    matrix = {mat_filename.split('.')[0] : parsed}
 
     hdf5storage.write(matrix, '.', mat_filename, matlab_compatible=True)
+    # mat4py.savemat(mat_filename, matrix)
 
 if __name__ == "__main__":
     import argparse

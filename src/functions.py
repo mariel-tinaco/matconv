@@ -16,13 +16,13 @@ def parse_sheet (sheet, label_index) -> dict:
                 np.array([[bbox[1]]], dtype=np.uint8),
                 np.array([[bbox[2]]], dtype=np.uint8),
                 np.array([[bbox[3]]], dtype=np.uint8), 
-                np.array(label, dtype='<U10' if not self.label_by_index else np.uint8)                
+                np.array(label, dtype=np.str_ if not self.label_by_index else np.uint8)                
                 )
             self.bbox_and_label.append(combine)
 
         def entry (self):
             return (
-                np.array([self.filename], dtype='<U15'),
+                np.array([self.filename], dtype=np.str_),
                 np.array([self.bbox_and_label], dtype=[(elem, 'O') for elem in self.header[1:]])
             )
 
@@ -32,7 +32,7 @@ def parse_sheet (sheet, label_index) -> dict:
     for row in range(1, sheet.max_row):
         col = [i[row].value for i in sheet.iter_cols(1, sheet.max_column)]
         if col[0]:
-            struct = ColumnStruct(col[0], header=header, label_by_index=True if label_index else False)
+            struct = ColumnStruct(str(col[0]), header=header, label_by_index=True if label_index else False)
             struct.add (col[1:5], label_index.index(col[-1]) if label_index else col[-1])
         else:
             print("Not yet implemented")
