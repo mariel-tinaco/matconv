@@ -25,7 +25,7 @@ def main (xlsx_source, label):
     parsed = parse_sheet(dataframe1, LABELS if label else None)
 
     matrix = {
-        'blinkerStruct' : parsed
+        MAT_FILENAME.split('.')[0] : parsed
     }
 
     hdf5storage.write(matrix, '.', MAT_FILENAME, matlab_compatible=True)
