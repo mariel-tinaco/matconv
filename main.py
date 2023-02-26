@@ -1,12 +1,14 @@
 """
 Run example
 
->>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx -l"
+>>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx" -l
 
 """
 
 import openpyxl
-from scipy.io import savemat
+import h5py as h5 
+import hdf5storage
+from scipy.io import savemat, loadmat
 from pathlib import Path
 
 from src.functions import *
@@ -23,15 +25,11 @@ def main (xlsx_source, label):
     parsed = parse_sheet(dataframe1, LABELS if label else None)
 
     matrix = {
-        '__globals__' : [],
-        '__header__' : b'MATLAB 5.0 MAT-file, Platform: PCWIN64, Created on: Fri Feb 25 11:11:11 2023',
-        '__version__' : '1.0',
         'blinkerStruct' : parsed
     }
 
-    savemat(MAT_FILENAME, mdict=matrix)
+    hdf5storage.write(matrix, '.', MAT_FILENAME, matlab_compatible=True)
 
-    
 if __name__ == "__main__":
     import argparse
 
