@@ -1,7 +1,7 @@
 """
 Run example
 
->>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx" -l
+>>> python main.py --xlsx "assets/Tiongco_PS1 - Annotation.xlsx" --fname "blinkerStruct.mat" -l
 
 """
 
@@ -14,9 +14,8 @@ from pathlib import Path
 from src.functions import *
 
 LABELS = ['Blinker']
-MAT_FILENAME = 'blinkerStruct.mat'
 
-def main (xlsx_source, label):
+def main (xlsx_source, mat_filename, label):
     xlsx_source = Path (xlsx_source)
 
     dataframe = openpyxl.load_workbook(xlsx_source)
@@ -25,18 +24,19 @@ def main (xlsx_source, label):
     parsed = parse_sheet(dataframe1, LABELS if label else None)
 
     matrix = {
-        MAT_FILENAME.split('.')[0] : parsed
+        mat_filename.split('.')[0] : parsed
     }
 
-    hdf5storage.write(matrix, '.', MAT_FILENAME, matlab_compatible=True)
+    hdf5storage.write(matrix, '.', mat_filename, matlab_compatible=True)
 
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-x', '--xlsx', type=str, required=True)
+    parser.add_argument('-f', '--fname', type=str, required=True)
     parser.add_argument('-l', default=False, action='store_true')
     args = parser.parse_args()
 
-    main (xlsx_source=args.xlsx, label=args.l)
+    main (xlsx_source=args.xlsx, mat_filename=args.fname, label=args.l)
 
